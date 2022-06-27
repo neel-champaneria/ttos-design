@@ -188,6 +188,7 @@ const Home = () => {
 
   const onChangeCategory = (categoryId) => {
     setCurrentCategory(allCategoriesObj[categoryId]);
+    window.scroll(0, 0);
   };
 
   const onSearch = () => {
@@ -338,10 +339,11 @@ const Home = () => {
                 allCategoriesObj && (
                   <div>
                     <div
-                      className={`category-list-container d-flex pb-2 mb-5
-                    ${isFixToTopHook ? " fix-to-top" : "scroll-content"}
-                    `}
+                      className={`category-list-container d-flex pb-2 mb-2 ${
+                        isFixToTopHook ? " fix-to-top" : ""
+                      } `}
                     >
+                      {/* ${isFixToTopHook ? " fix-to-top" : "scroll-content"} */}
                       {menu.map((category, idx) => {
                         return (
                           <div
@@ -377,7 +379,7 @@ const Home = () => {
                       })}
                     </div>
 
-                    <div className="container">
+                    <div className="container fix-height">
                       {currentCategory &&
                         currentCategory?.itemsRows?.map((row, idx) => {
                           return (

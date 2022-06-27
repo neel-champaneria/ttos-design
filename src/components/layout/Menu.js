@@ -64,7 +64,7 @@ const Menu = () => {
   useEffect(() => {
     const __next_div = document.getElementById("__next");
     if (orderingCart.orderItems.length > 0) {
-      __next_div.style.paddingBottom = "180px";
+      // __next_div.style.paddingBottom = "180px";
       let tempQty = 0;
       const { orderItems } = orderingCart;
       for (let i = 0; i < orderItems.length; i++) {
@@ -78,7 +78,8 @@ const Menu = () => {
         setQtyInCart(tempQty);
       }
     } else {
-      __next_div.style.paddingBottom = "30px";
+      //  __next_div.style.paddingBottom = "30px";
+      setQtyInCart(0);
     }
   }, [orderingCart]);
 
