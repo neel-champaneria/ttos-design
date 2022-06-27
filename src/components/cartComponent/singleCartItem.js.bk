@@ -1,0 +1,135 @@
+import { useState } from "react";
+import { Button, Offcanvas } from "react-bootstrap";
+import CustomizeOffCanvas from "./customizeOffCanvas";
+import { useDispatch } from "react-redux";
+import { createOrderingItemAction } from "../../actions/OrderingItemAction";
+import {
+  decreaseQuantityFromCartAction,
+  increaseQuantityFromCartAction,
+  removeItemFromCartAction,
+} from "../../actions/OrderingCartAction";
+import { Money } from "../../utils/money";
+
+const SingleItemCart = ({ item }) => {
+  const dispatch = useDispatch();
+  const [showCustomizePopper, setShowCutomizePopper] = useState(false);
+
+  const openCustomizePopper = () => {
+    setShowCutomizePopper(true);
+    dispatch(createOrderingItemAction(item));
+  };
+
+  const closeCustomizePopper = () => {
+    setShowCutomizePopper(false);
+  };
+
+  const onIncreaseQuantityFromCart = (itemId, sequence) => {
+    dispatch(increaseQuantityFromCartAction(itemId, sequence));
+  };
+
+  const onDecreaseQuantityFromCart = (itemId, sequence, qty) => {
+    if (qty === 1) {
+      onRemoveItemFromCart(itemId, sequence);
+    } else {
+      dispatch(decreaseQuantityFromCartAction(itemId, sequence));
+    }
+  };
+
+  const onRemoveItemFromCart = (itemId, sequence) => {
+    dispatch(removeItemFromCartAction(itemId, sequence));
+  };
+
+  return (
+    <>
+      <div className="bg-white border-gray p-block container-fluid">
+        <div className="row justify-content-md-center">
+          <div className="col-5">
+            <h2 className="medium_para mb10">{item.name}</h2>
+            {item.modifiers.map((modifier, idx) => {
+              return (
+                <li
+                  key={`${modifier.id}` + `${modifier.seq}`}
+                  className="small_para mb10"
+                  style={{ marginBottom: 0 }}
+                >
+                  {modifier.name}
+                </li>
+              );
+            })}
+            <p
+              className="medium_para mb0 pb0 red_font"
+              onClick={openCustomizePopper}
+            >
+              Customise
+            </p>
+          </div>
+          <div className="col-4 d-flex">
+            <div className="p-d-flex quantity-increase-decrease-container mr-auto">
+              <Button
+                className="btn right-border-radius left_quantity h-30 red_bg"
+                variant="danger"
+                onClick={() => {
+                  onDecreaseQuantityFromCart(
+                    item.itemId,
+                    item.sequence,
+                    item.qty
+                  );
+                }}
+              >
+                <i className="fa fa-minus"></i>
+              </Button>
+              <input
+                type="number"
+                id="quantity"
+                name="quantity"
+                className="input p-text-center p-ml-1 p-mr-1 red_text"
+                autocComplete="off"
+                required
+                readOnly
+                value={item.qty}
+              />
+              <Button
+                className="btn left-border-radius right_quantity h-30 red_bg"
+                variant="danger"
+                onClick={() => {
+                  onIncreaseQuantityFromCart(item.itemId, item.sequence);
+                }}
+              >
+                <i className="fa fa-plus"></i>
+              </Button>
+            </div>
+          </div>
+
+          <div className="col-3">
+            <p className="medium_para font_semibold mt8">
+              {Money.moneyFormat(item.priceSum)}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="d-flex justify-content-center">
+        <Offcanvas
+          show={showCustomizePopper}
+          onHide={closeCustomizePopper}
+          placement="bottom"
+        >
+          <Offcanvas.Header closeButton>
+            <Offcanvas.Title>
+              <h3 className="line_clamp">{item.name}</h3>
+            </Offcanvas.Title>
+          </Offcanvas.Header>
+          <Offcanvas.Body>
+            <hr className="solid" />
+            <CustomizeOffCanvas
+              cartItem={item}
+              closeCustomizePopper={closeCustomizePopper}
+            />
+          </Offcanvas.Body>
+        </Offcanvas>
+      </div>
+    </>
+  );
+};
+
+export default SingleItemCart;

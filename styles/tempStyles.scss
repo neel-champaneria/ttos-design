@@ -1,0 +1,56 @@
+@import "./variables.module.scss";
+
+.logo_container_outer_div {
+  height: 180px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.logo_container_inner_div {
+  height: 100%;
+  width: 100%;
+  line-height: 180px;
+  text-align: center;
+}
+
+.logo_container_img {
+  max-width: 100%;
+  max-height: 100%;
+  display: inline-block;
+  margin: 0 auto;
+  vertical-align: middle;
+}
+
+.category_container {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.category_block {
+  background-color: rgb(254, 0, 0);
+  border: 2px solid #ffffff;
+  border-radius: 20px;
+  box-shadow: rgb(28 28 28 / 49%) 0px 0px 5px 1px;
+  padding: 0 7px;
+}
+.category_block_highlight {
+  min-height: 15px;
+  background: linear-gradient(
+    0deg,
+    rgb(254 0 0) 0%,
+    rgb(255, 126, 126) 70%,
+    rgb(255 175 175) 100%
+  );
+  border-radius: 10px;
+  margin-top: 2px;
+}
+.category_block_name {
+  margin-top: -10px;
+  text-align: center !important;
+  color: #ffffff;
+  font-size: $primary-font;
+}
+
+.void_order {
+  color: $grey-color;
+}

@@ -1,0 +1,52 @@
+#Pipelines does not currently support line breaks in environment variables, so base-64 encode the private key by running
+#base64 -w 0 < server-ssh-key.pem
+#copy command output and save in pipeline vaibales for example #TTOS_FE_SERVER_SSH_KEY
+#https://support.atlassian.com/bitbucket-cloud/docs/variables-and-secrets/
+image: node:14.17.0
+pipelines:
+  branches:
+     dev:
+       - step:
+           name: Build & Deploy
+           deployment: dev
+           script:
+             - pipe: atlassian/ssh-run:0.4.0
+               variables:
+                 SSH_USER: $TTOS_FE_SERVER_USERNAME
+                 SERVER: $TTOS_FE_SERVER_IP
+                 SSH_KEY: $TTOS_FE_SERVER_SSH_KEY
+                 MODE: 'script'
+                 COMMAND: 'deploy.sh' # path to a script in your repository
+                 ENV_VARS: >-
+                     BRANCH=${BITBUCKET_BRANCH}
+
+     staging:
+       - step:
+           name: Build & Deploy
+           deployment: staging
+           script:
+             - pipe: atlassian/ssh-run:0.4.0
+               variables:
+                 SSH_USER: $TTOS_FE_SERVER_USERNAME
+                 SERVER: $TTOS_FE_SERVER_IP
+                 SSH_KEY: $TTOS_FE_SERVER_SSH_KEY
+                 MODE: 'script'
+                 COMMAND: 'deploy.sh' # path to a script in your repository
+                 ENV_VARS: >-
+                     BRANCH=${BITBUCKET_BRANCH}
+
+     master:
+       - step:
+           name: Build & Deploy
+           deployment: Production
+           script:
+             - pipe: atlassian/ssh-run:0.4.0
+               variables:
+                 SSH_USER: $TTOS_FE_SERVER_USERNAME
+                 SERVER: $TTOS_FE_SERVER_IP
+                 SSH_KEY: $TTOS_FE_SERVER_SSH_KEY
+                 MODE: 'script'
+                 COMMAND: 'deploy.sh' # path to a script in your repository
+                 ENV_VARS: >-
+                     BRANCH=${BITBUCKET_BRANCH}
+
